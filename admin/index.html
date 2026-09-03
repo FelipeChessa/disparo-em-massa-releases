@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>MultiEnvio — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand: #16a34a; --brand-dark: #065f46; --brand-light: #22c55e;
+    --ink: #0f172a; --ink-soft: #334155; --muted: #64748b;
+    --surface: #ffffff; --surface-alt: #f8fafc; --bg: #eef1f5; --border: #e2e8f0;
+    --danger: #dc2626; --danger-bg: #fef2f2; --warning: #b45309; --warning-bg: #fffbeb;
+    --font-heading: 'Sora', 'Segoe UI', Arial, sans-serif;
+    --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--bg); color: var(--ink); }
+  h1, h2 { font-family: var(--font-heading); letter-spacing: -0.01em; }
+  header { background: linear-gradient(120deg, #0b1220, #16233a 55%, #0f3d33 130%); color: white; padding: 18px 24px; }
+  header h1 { font-size: 17px; margin: 0; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 20px 60px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(15,23,42,.06); }
+  .card h2 { font-size: 16px; margin: 0 0 16px; }
+  label { display: block; font-weight: 600; font-size: 13px; color: var(--ink-soft); margin: 12px 0 6px; }
+  label:first-child { margin-top: 0; }
+  input[type="text"], input[type="password"], input[type="number"] {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-family: var(--font-body); font-size: 14px;
+  }
+  input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(22,163,74,.14); }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; color: var(--muted); }
+  button { font-family: var(--font-heading); font-weight: 700; font-size: 13.5px; cursor: pointer; border-radius: 8px; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--brand-light), var(--brand-dark)); color: white; border: none;
+    padding: 11px 20px; margin-top: 16px;
+  }
+  .btn-primary:disabled { opacity: .55; cursor: not-allowed; }
+  .btn-secondary { background: var(--surface-alt); color: var(--ink-soft); border: 1px solid var(--border); padding: 6px 12px; font-size: 12px; }
+  .btn-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid #fecaca; padding: 6px 12px; font-size: 12px; }
+  .result-box {
+    margin-top: 16px; padding: 14px; background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: 8px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12px; word-break: break-all;
+    display: none;
+  }
+  .result-box.visible { display: block; }
+  .notice { margin-top: 12px; padding: 10px 12px; border-radius: 8px; font-size: 13px; display: none; }
+  .notice.visible { display: block; }
+  .notice.error { background: var(--danger-bg); color: var(--danger); }
+  .notice.success { background: #f0fdf4; color: var(--brand-dark); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+  td.actions { display: flex; gap: 6px; }
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 20px; }
+  .gate { max-width: 380px; margin: 60px auto; text-align: center; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+  <header><h1>MultiEnvio — Painel Admin</h1></header>
+
+  <main>
+    <section id="gate" class="card gate">
+      <h2>Entrar</h2>
+      <label for="token-input">Senha de admin (ADMIN_TOKEN)</label>
+      <input type="password" id="token-input" placeholder="Cole sua senha de admin" autocomplete="off" />
+      <div class="checkbox-row">
+        <input type="checkbox" id="remember-token" checked />
+        <label for="remember-token" style="margin:0;font-weight:400;">Lembrar neste navegador</label>
+      </div>
+      <button class="btn-primary" id="unlock-btn" style="width:100%;">Entrar</button>
+      <p id="gate-error" class="notice error"></p>
+    </section>
+
+    <div id="panel" class="hidden">
+      <section class="card">
+        <h2>Gerar nova chave de licença</h2>
+        <label for="customer-name">Nome do cliente</label>
+        <input type="text" id="customer-name" placeholder="Ex: Padaria do João" />
+        <label for="expiry-days">Validade em dias (deixe em branco para vitalícia)</label>
+        <input type="number" id="expiry-days" min="1" placeholder="Vitalícia" />
+        <button class="btn-primary" id="generate-btn">Gerar chave</button>
+        <p id="generate-error" class="notice error"></p>
+        <div id="generate-result" class="result-box"></div>
+      </section>
+
+      <section class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <h2>Ativações</h2>
+          <button class="btn-secondary" id="refresh-btn">Atualizar</button>
+        </div>
+        <p id="activations-empty" class="empty hidden">Nenhuma ativação registrada ainda.</p>
+        <div style="overflow-x:auto;">
+          <table id="activations-table" class="hidden">
+            <thead>
+              <tr><th>Cliente</th><th>Dispositivo</th><th>Desde</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="activations-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <button class="btn-secondary" id="logout-btn">Sair / trocar senha</button>
+    </div>
+  </main>
+
+<script>
+  const gate = document.getElementById('gate')
+  const panel = document.getElementById('panel')
+  const tokenInput = document.getElementById('token-input')
+  const rememberCheckbox = document.getElementById('remember-token')
+  const unlockBtn = document.getElementById('unlock-btn')
+  const gateError = document.getElementById('gate-error')
+
+  let adminToken = null
+
+  function showNotice(el, text, type) {
+    el.textContent = text
+    el.className = 'notice visible ' + type
+  }
+  function hideNotice(el) {
+    el.className = 'notice'
+  }
+
+  async function apiFetch(path, options = {}) {
+    const res = await fetch(path, {
+      ...options,
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken, ...(options.headers || {}) }
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Erro na requisição.')
+    return data
+  }
+
+  async function tryUnlock(token) {
+    adminToken = token
+    try {
+      await apiFetch('/api/admin/activations')
+      gate.classList.add('hidden')
+      panel.classList.remove('hidden')
+      if (rememberCheckbox.checked) localStorage.setItem('adminToken', token)
+      loadActivations()
+    } catch (err) {
+      adminToken = null
+      showNotice(gateError, 'Senha incorreta ou servidor indisponível.', 'error')
+    }
+  }
+
+  unlockBtn.addEventListener('click', () => {
+    hideNotice(gateError)
+    const token = tokenInput.value.trim()
+    if (!token) return showNotice(gateError, 'Digite a senha de admin.', 'error')
+    tryUnlock(token)
+  })
+  tokenInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') unlockBtn.click() })
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    localStorage.removeItem('adminToken')
+    adminToken = null
+    panel.classList.add('hidden')
+    gate.classList.remove('hidden')
+    tokenInput.value = ''
+  })
+
+  // tenta usar o token salvo no navegador, se tiver
+  const savedToken = localStorage.getItem('adminToken')
+  if (savedToken) tryUnlock(savedToken)
+
+  // gerar chave
+  const generateBtn = document.getElementById('generate-btn')
+  const generateError = document.getElementById('generate-error')
+  const generateResult = document.getElementById('generate-result')
+
+  generateBtn.addEventListener('click', async () => {
+    hideNotice(generateError)
+    generateResult.className = 'result-box'
+    const customerName = document.getElementById('customer-name').value.trim()
+    const expiryDays = document.getElementById('expiry-days').value.trim()
+    if (!customerName) return showNotice(generateError, 'Digite o nome do cliente.', 'error')
+
+    generateBtn.disabled = true
+    generateBtn.textContent = 'Gerando...'
+    try {
+      const data = await apiFetch('/api/admin/generate-license', {
+        method: 'POST',
+        body: JSON.stringify({ customerName, expiryDays: expiryDays ? Number(expiryDays) : null })
+      })
+      const validade = data.expiresAt ? new Date(data.expiresAt).toLocaleDateString('pt-BR') : 'vitalícia'
+      generateResult.innerHTML =
+        '<strong>Cliente:</strong> ' + customerName + '<br>' +
+        '<strong>Validade:</strong> ' + validade + '<br><br>' +
+        '<strong>Chave:</strong><br>' + data.key +
+        '<br><br><button class="btn-secondary" id="copy-key-btn" type="button">Copiar chave</button>'
+      generateResult.className = 'result-box visible'
+      document.getElementById('copy-key-btn').addEventListener('click', (e) => {
+        navigator.clipboard.writeText(data.key)
+        e.target.textContent = 'Copiado!'
+        setTimeout(() => { e.target.textContent = 'Copiar chave' }, 1500)
+      })
+      document.getElementById('customer-name').value = ''
+      document.getElementById('expiry-days').value = ''
+    } catch (err) {
+      showNotice(generateError, err.message, 'error')
+    }
+    generateBtn.disabled = false
+    generateBtn.textContent = 'Gerar chave'
+  })
+
+  // lista de ativações
+  const refreshBtn = document.getElementById('refresh-btn')
+  const activationsEmpty = document.getElementById('activations-empty')
+  const activationsTable = document.getElementById('activations-table')
+  const activationsBody = document.getElementById('activations-body')
+
+  async function loadActivations() {
+    try {
+      const data = await apiFetch('/api/admin/activations')
+      const entries = Object.entries(data)
+      if (entries.length === 0) {
+        activationsTable.classList.add('hidden')
+        activationsEmpty.classList.remove('hidden')
+        return
+      }
+      activationsEmpty.classList.add('hidden')
+      activationsTable.classList.remove('hidden')
+      activationsBody.innerHTML = ''
+      entries
+        .sort((a, b) => new Date(b[1].firstActivatedAt) - new Date(a[1].firstActivatedAt))
+        .forEach(([key, info]) => {
+          const tr = document.createElement('tr')
+          const date = info.firstActivatedAt ? new Date(info.firstActivatedAt).toLocaleDateString('pt-BR') : '-'
+          tr.innerHTML =
+            '<td>' + escapeHtml(info.customer || '-') + '</td>' +
+            '<td>' + escapeHtml((info.deviceId || '').slice(0, 12)) + '...</td>' +
+            '<td>' + date + '</td>' +
+            '<td>' + (info.revoked ? 'Revogada' : 'Ativa') + '</td>' +
+            '<td class="actions"></td>'
+          const actionsCell = tr.querySelector('.actions')
+
+          const resetBtn = document.createElement('button')
+          resetBtn.className = 'btn-secondary'
+          resetBtn.textContent = 'Liberar p/ outro PC'
+          resetBtn.addEventListener('click', () => doAction('/api/admin/reset', key, resetBtn))
+          actionsCell.appendChild(resetBtn)
+
+          if (!info.revoked) {
+            const revokeBtn = document.createElement('button')
+            revokeBtn.className = 'btn-danger'
+            revokeBtn.textContent = 'Revogar'
+            revokeBtn.addEventListener('click', () => doAction('/api/admin/revoke', key, revokeBtn))
+            actionsCell.appendChild(revokeBtn)
+          }
+
+          activationsBody.appendChild(tr)
+        })
+    } catch (err) {
+      // painel informativo — silencioso se der erro pontual
+    }
+  }
+
+  async function doAction(path, key, btn) {
+    btn.disabled = true
+    try {
+      await apiFetch(path, { method: 'POST', body: JSON.stringify({ key }) })
+      loadActivations()
+    } catch (err) {
+      alert(err.message)
+      btn.disabled = false
+    }
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div')
+    div.textContent = str
+    return div.innerHTML
+  }
+
+  refreshBtn.addEventListener('click', loadActivations)
+</script>
+</body>
+</html>
