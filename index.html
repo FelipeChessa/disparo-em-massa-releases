@@ -75,6 +75,26 @@
     margin: 0 0 36px;
   }
 
+  .price-tag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 28px;
+  }
+  .price-value {
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .price-note {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
   .download-btn {
     display: inline-flex;
     align-items: center;
@@ -146,6 +166,7 @@
     align-items: flex-start;
   }
   .warning-note svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; }
+  .warning-note a { color: inherit; font-weight: 700; text-decoration: underline; }
 
   .features {
     display: grid;
@@ -190,6 +211,11 @@
         o risco de bloqueio da sua conta.
       </p>
 
+      <div class="price-tag">
+        <span class="price-value">R$ 129,90</span>
+        <span class="price-note">pagamento único · licença vitalícia, sem mensalidade</span>
+      </div>
+
       <a class="download-btn" href="#" id="download-link" download>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></svg>
         Baixar para Windows
@@ -224,7 +250,8 @@
 
         <div class="warning-note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></svg>
-          <span>Não recebeu sua chave de licença ainda? Entre em contato com quem te vendeu o programa.</span>
+          <span>Não recebeu sua chave de licença ainda? Fale com a nossa equipe pelo e-mail
+          <a href="mailto:multienvio.g7@gmail.com">multienvio.g7@gmail.com</a>.</span>
         </div>
       </div>
 
