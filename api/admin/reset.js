@@ -2,10 +2,8 @@
 // Libera a chave para ser ativada em outro computador (cliente trocou de PC ou formatou).
 // Também desfaz uma revogação, se houver.
 
-import { Redis } from '@upstash/redis'
+import { redis } from '../../lib/redis.js'
 import { requireAdmin } from '../../lib/verify.js'
-
-const redis = Redis.fromEnv()
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' })

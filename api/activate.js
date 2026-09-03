@@ -2,10 +2,8 @@
 // "Ativar". Registra em qual computador (deviceId) a chave foi usada pela primeira vez e
 // recusa uma segunda ativação com a mesma chave em outro computador.
 
-import { Redis } from '@upstash/redis'
+import { redis } from '../lib/redis.js'
 import { verifySignature } from '../lib/verify.js'
-
-const redis = Redis.fromEnv()
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
