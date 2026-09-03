@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Disparo em Massa — Baixar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand: #16a34a;
+    --brand-dark: #065f46;
+    --brand-light: #22c55e;
+    --whatsapp: #25d366;
+    --ink: #0f172a;
+    --ink-soft: #334155;
+    --muted: #64748b;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --bg: #eef1f5;
+    --border: #e2e8f0;
+    --warning: #b45309;
+    --warning-bg: #fffbeb;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 8px 24px rgba(15,23,42,.08);
+    --shadow-lg: 0 24px 56px rgba(15,23,42,.16);
+    --font-heading: 'Sora', 'Segoe UI', Arial, sans-serif;
+    --font-body: 'Inter', 'Segoe UI', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-heading); letter-spacing: -0.01em; }
+
+  header {
+    background: linear-gradient(120deg, #0b1220 0%, #16233a 55%, #0f3d33 130%);
+    color: white;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--whatsapp), var(--brand-dark));
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .brand-mark svg { width: 19px; height: 19px; color: white; }
+  header .name { font-size: 16.5px; font-weight: 700; }
+
+  .hero {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 72px 24px 48px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    margin: 0 0 16px;
+    line-height: 1.15;
+  }
+  .hero p.lead {
+    font-size: 17px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0 0 36px;
+  }
+
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--brand-light), var(--brand-dark));
+    color: white;
+    text-decoration: none;
+    padding: 17px 34px;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 10px 28px rgba(22,163,74,.32);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .download-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(22,163,74,.4); }
+  .download-btn svg { width: 20px; height: 20px; }
+
+  .download-meta {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .download-meta a { color: var(--brand-dark); font-weight: 600; text-decoration: none; }
+  .download-meta a:hover { text-decoration: underline; }
+
+  .section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card h2 { font-size: 20px; margin: 0 0 20px; }
+
+  .steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 18px; }
+  .steps li { display: flex; gap: 14px; align-items: flex-start; }
+  .step-num {
+    width: 28px; height: 28px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    color: var(--brand-dark);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+  }
+  .steps p { margin: 0; line-height: 1.55; color: var(--ink-soft); font-size: 14.5px; }
+  .steps strong { color: var(--ink); }
+
+  .warning-note {
+    margin-top: 28px;
+    background: var(--warning-bg);
+    color: var(--warning);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .warning-note svg { width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .feature strong { display: block; color: var(--ink); font-family: var(--font-heading); font-size: 14.5px; margin-bottom: 4px; }
+
+  footer {
+    text-align: center;
+    padding: 32px 24px 48px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <span class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="10" y2="14"/><polygon points="21 3 14 21 10 14 3 10 21 3"/></svg>
+    </span>
+    <span class="name">Disparo em Massa</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Envie mensagens em massa pelo WhatsApp, direto do seu computador</h1>
+      <p class="lead">
+        Organize seus contatos por etiqueta no WhatsApp Business e dispare mensagens,
+        catálogos ou promoções para todos de uma vez — com ritmo de envio pensado para reduzir
+        o risco de bloqueio da sua conta.
+      </p>
+
+      <a class="download-btn" href="#" id="download-link" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></svg>
+        Baixar para Windows
+      </a>
+      <p class="download-meta">Windows 10 ou 11 · gratuito para instalar, requer licença para ativar · <a href="#" id="download-msi-link">baixar versão .msi</a></p>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2>Como instalar</h2>
+        <ul class="steps">
+          <li>
+            <span class="step-num">1</span>
+            <p><strong>Baixe o instalador</strong> clicando no botão acima e execute o arquivo baixado.</p>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <p><strong>Se aparecer um aviso azul do Windows</strong> ("O Windows protegeu seu PC"), clique em
+              <strong>"Mais informações"</strong> e depois em <strong>"Executar assim mesmo"</strong>. Isso é normal
+              para programas novos baixados da internet — não é um vírus.</p>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <p><strong>Siga o instalador</strong> até o fim. O programa abre sozinho ao terminar.</p>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <p><strong>Cole a chave de licença</strong> que você recebeu e escaneie o QR Code com o WhatsApp
+              Business do seu celular para conectar.</p>
+          </li>
+        </ul>
+
+        <div class="warning-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></svg>
+          <span>Não recebeu sua chave de licença ainda? Entre em contato com quem te vendeu o programa.</span>
+        </div>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <strong>Por etiqueta</strong>
+          Escolha uma etiqueta do WhatsApp Business e envie para todos os contatos dela de uma vez.
+        </div>
+        <div class="feature">
+          <strong>Ritmo protegido</strong>
+          Pausas configuráveis entre envios, pensadas para reduzir o risco de bloqueio.
+        </div>
+        <div class="feature">
+          <strong>Acompanhamento em tempo real</strong>
+          Veja quem recebeu e quem falhou, com número e nome, para reenvio manual se precisar.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Disparo em Massa — automação local para WhatsApp Business.
+  </footer>
+
+  <script>
+    // Troque os dois links abaixo pelas URLs reais dos arquivos no GitHub Releases.
+    document.getElementById('download-link').href =
+      'https://github.com/FelipeChessa/disparo-em-massa-releases/releases/latest/download/Disparo.em.Massa.Setup.1.0.0.exe'
+    document.getElementById('download-msi-link').href =
+      'https://github.com/FelipeChessa/disparo-em-massa-releases/releases/latest/download/Disparo.em.Massa.1.0.0.msi'
+  </script>
+</body>
+</html>
