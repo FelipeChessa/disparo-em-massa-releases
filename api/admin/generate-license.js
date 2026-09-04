@@ -17,10 +17,12 @@ export default function handler(req, res) {
     return res.status(400).json({ error: 'Nome do cliente é obrigatório.' })
   }
 
-  const pem = process.env.LICENSE_PRIVATE_KEY
-  if (!pem) {
+  const rawPem = process.env.LICENSE_PRIVATE_KEY
+  if (!rawPem) {
     return res.status(503).json({ error: 'LICENSE_PRIVATE_KEY não configurada nas variáveis de ambiente do projeto.' })
   }
+  // Algumas UIs de variáveis de ambiente colapsam as quebras de linha do PEM em "\n" literal.
+  const pem = rawPem.includes('\n') ? rawPem : rawPem.replace(/\\n/g, '\n')
 
   let privateKey
   try {
