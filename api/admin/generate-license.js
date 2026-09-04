@@ -27,8 +27,18 @@ export default function handler(req, res) {
   let privateKey
   try {
     privateKey = crypto.createPrivateKey(pem)
-  } catch {
-    return res.status(500).json({ error: 'A chave privada configurada no servidor é inválida.' })
+  } catch (err) {
+    return res.status(500).json({
+      error: 'A chave privada configurada no servidor é inválida.',
+      debug: {
+        length: pem.length,
+        hasRealNewline: pem.includes('\n'),
+        lineCount: pem.split('\n').length,
+        startsWith: pem.slice(0, 27),
+        endsWith: pem.slice(-25),
+        message: err.message
+      }
+    })
   }
 
   const days = expiryDays ? Number(expiryDays) : null
