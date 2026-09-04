@@ -21,24 +21,19 @@ export default function handler(req, res) {
   if (!rawPem) {
     return res.status(503).json({ error: 'LICENSE_PRIVATE_KEY não configurada nas variáveis de ambiente do projeto.' })
   }
+  let pem = rawPem.trim()
   // Algumas UIs de variáveis de ambiente colapsam as quebras de linha do PEM em "\n" literal.
-  const pem = rawPem.includes('\n') ? rawPem : rawPem.replace(/\\n/g, '\n')
+  if (!pem.includes('\n')) pem = pem.replace(/\\n/g, '\n')
+  // Se só o corpo base64 foi colado (sem as linhas BEGIN/END), reconstrói o PEM.
+  if (!pem.includes('-----BEGIN')) {
+    pem = `-----BEGIN PRIVATE KEY-----\n${pem}\n-----END PRIVATE KEY-----`
+  }
 
   let privateKey
   try {
     privateKey = crypto.createPrivateKey(pem)
-  } catch (err) {
-    return res.status(500).json({
-      error: 'A chave privada configurada no servidor é inválida.',
-      debug: {
-        length: pem.length,
-        hasRealNewline: pem.includes('\n'),
-        lineCount: pem.split('\n').length,
-        startsWith: pem.slice(0, 27),
-        endsWith: pem.slice(-25),
-        message: err.message
-      }
-    })
+  } catch {
+    return res.status(500).json({ error: 'A chave privada configurada no servidor é inválida.' })
   }
 
   const days = expiryDays ? Number(expiryDays) : null
